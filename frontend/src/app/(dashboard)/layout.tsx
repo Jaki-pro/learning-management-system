@@ -1,4 +1,5 @@
 import Navbar from "../../../components/layout/Navbar";
+import Sidebar from "../../../components/layout/Sidebar";
 export default function DashboardLayout({
   children,
 }: {
@@ -6,10 +7,10 @@ export default function DashboardLayout({
 }) {
   return (
     <div className="flex h-screen bg-background"> 
-      {/* <Sidebar /> */}
+      <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
        <Navbar title="sdfsadf"/>
-        <main className="flex-1 overflow-x-hidden overflow-y-auto bg-muted/50 p-8">
+        <main className="flex-1   bg-muted/50 p-8">
           {children}
         </main>
       </div>
