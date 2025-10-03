@@ -16,9 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${inter.className} antialiased`}>
         <ThemeProvider> 
-          {children}
+          <div className="min-h-screen bg-background text-foreground">
+            {children}
+          </div>
         </ThemeProvider>
       </body>
     </html>

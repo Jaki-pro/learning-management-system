@@ -2,72 +2,37 @@
 @tailwind components;
 @tailwind utilities;
 
-/* --------------------------
-   Define CSS variables for themes
--------------------------- */
-:root {
-  /* Light Theme Variables */
-  --primary-light: #ffffff;
-  --secondary-light: #f1f5f9;
-  --accent-light: #3b82f6;
-  --text-primary-light: #0f172a;
-  --text-secondary-light: #64748b;
+@layer base {
+  :root {
+    /* Light Theme */
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
+    --primary: #3b82f6;
+    --primary-foreground: #ffffff;
+    --border: #e5e7eb; /* slate-200 */
+  }
 
-  /* Map theme variables for easy usage */
-  --background: var(--primary-light);
-  --foreground: var(--text-primary-light);
-  --card: var(--secondary-light);
-  --card-foreground: var(--text-primary-light);
-  --muted: var(--secondary-light);
-  --muted-foreground: var(--text-secondary-light);
-  --primary: var(--accent-light);
-  --primary-foreground: var(--primary-light);
-  --border: #e2e8f0; /* Tailwind slate.200 */
-}
+  .dark {
+    /* Dark Theme */
+    --background: #0f172a;
+    --foreground: #f1f5f9;
+    --card: #1e293b;
+    --card-foreground: #f1f5f9;
+    --muted: #1e293b;
+    --muted-foreground: #94a3b8;
+    --primary: #38bdf8;
+    --primary-foreground: #0f172a;
+    --border: #374151; /* slate-700 */
+  }
 
-.dark {
-  /* Dark Theme Variables */
-  --primary-dark: #0f172a;
-  --secondary-dark: #1e293b;
-  --accent-dark: #38bdf8;
-  --text-primary-dark: #f1f5f9;
-  --text-secondary-dark: #94a3b8;
-
-  /* Map theme variables for easy usage */
-  --background: var(--primary-dark);
-  --foreground: var(--text-primary-dark);
-  --card: var(--secondary-dark);
-  --card-foreground: var(--text-primary-dark);
-  --muted: var(--secondary-dark);
-  --muted-foreground: var(--text-secondary-dark);
-  --primary: var(--accent-dark);
-  --primary-foreground: var(--primary-dark);
-  --border: #334155; /* Tailwind slate.700 */
-}
-
-/* --------------------------
-   Apply variables to body
--------------------------- */
-body {
+  body {
   background-color: var(--background);
   color: var(--foreground);
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Optional: Cards, buttons, borders, etc. */
-.card {
-  background-color: var(--card);
-  color: var(--card-foreground);
-  border: 1px solid var(--border);
-}
-
-.button {
-  background-color: var(--primary);
-  color: var(--primary-foreground);
-  border: 1px solid var(--border);
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.muted-text {
-  color: var(--muted-foreground);
 }
