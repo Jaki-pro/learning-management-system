@@ -11,12 +11,8 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "text": {
+    "title": {
       "type": "string",
-      "required": true
-    },
-    "description": {
-      "type": "blocks",
       "required": true
     },
     "modules": {
@@ -24,11 +20,14 @@
       "relation": "oneToMany",
       "target": "api::module.module"
     },
-    "enrollment": {
+    "enrollments": {
       "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::enrollment.enrollment",
-      "mappedBy": "course"
+      "relation": "oneToMany",
+      "target": "api::enrollment.enrollment"
+    },
+    "description": {
+      "type": "text",
+      "required": true
     }
   }
 }

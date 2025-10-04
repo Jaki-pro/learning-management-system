@@ -27,7 +27,7 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
     },
     ...otherOptions,
   });
-
+  console.log(response, 'response from fetchApi');
   if (!response.ok) {
     const error = await response.json();
     throw new Error(error.error?.message || 'Something went wrong');

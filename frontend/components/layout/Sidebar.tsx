@@ -10,9 +10,8 @@ import {
   Code, 
   LogOut 
 } from 'lucide-react';
-// import { useAuth } from '@/context/AuthContext';
-
-// --- 1. Animated Logo Component (for that premium flair) ---
+import { useAuth } from '../../context/AuthContext'; 
+ 
 const Logo = () => {
   const logoVariants: Variants = {
     hidden: { opacity: 0 },
@@ -43,22 +42,19 @@ const Logo = () => {
     </motion.div>
   );
 };
-
-// --- 2. Main Sidebar Component ---
+ 
 export default function Sidebar() {
-//   const { user, logout } = useAuth();
-    const user = { username: 'JohnDoe', role: { name: 'developer' } }; // Mocked user for demonstration
+  const { user, logout } = useAuth(); 
   const pathname = usePathname();
-
-  // A simplified, flat navigation structure
+ 
   const navLinks = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, roles: ['student', 'developer', 'social-manager', 'admin'] },
     { name: 'Courses', href: '/courses', icon: BookOpen, roles: ['student', 'developer', 'social-manager', 'admin'] },
     { name: 'Social', href: '/social', icon: MessageSquare, roles: ['student', 'developer', 'social-manager', 'admin'] },
-    { name: 'Create Course', href: '/developer/new-course', icon: Code, roles: ['developer', 'admin'] },
-    { name: 'Create Post', href: '/social/new', icon: MessageSquare, roles: ['social-manager', 'admin'] },
+    { name: 'Create Course', href: '/new-course', icon: Code, roles: ['developer', 'admin'] },
+    { name: 'Create Post', href: '/new-post', icon: MessageSquare, roles: ['social-manager', 'admin'] },
   ];
-
+  console.log(user?.role?.name);
   return (
     <aside className="
         md:flex flex-col w-64 h-screen 
@@ -116,7 +112,7 @@ export default function Sidebar() {
               </div>
             </div>
             <button
-              onClick={/* logout */ () => {}}
+              onClick={logout }
               className="p-2 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-colors"
               title="Logout"
             >

@@ -52,9 +52,9 @@ export default function RegisterPage() {
           required 
         />
         <Input
-          id="email" 
-          label="Email" 
-          type="email" 
+          id="username" 
+          label="User Name" 
+          type="text" 
           value={username} 
           onChange={(e) => setUsername(e.target.value)} 
           required 
