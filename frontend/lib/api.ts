@@ -32,6 +32,8 @@ export async function fetchApi(endpoint: string, options: RequestInit = {}) {
     const error = await response.json();
     throw new Error(error.error?.message || 'Something went wrong');
   }
-
+  if(options.method === 'DELETE') {
+    return;
+  }
   return response.json();
 }
