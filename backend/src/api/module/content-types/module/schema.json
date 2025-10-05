@@ -15,10 +15,21 @@
       "type": "string",
       "required": true
     },
+    "course": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::course.course",
+      "inversedBy": "modules"
+    },
     "lessons": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::lesson.lesson"
+      "target": "api::lesson.lesson",
+      "mappedBy": "module"
+    },
+    "description": {
+      "type": "text",
+      "required": true
     }
   }
 }

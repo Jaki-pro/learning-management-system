@@ -15,19 +15,15 @@
       "type": "string",
       "required": true
     },
-    "modules": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::module.module"
-    },
-    "enrollments": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::enrollment.enrollment"
-    },
     "description": {
       "type": "text",
       "required": true
+    },
+    "modules": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::module.module",
+      "mappedBy": "course"
     }
   }
 }
