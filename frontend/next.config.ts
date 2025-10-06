@@ -1,7 +1,10 @@
-import type { NextConfig } from "next";
+import { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  reactStrictMode: true,
+  images: {
+    domains: ['placehold.co'], // Add your external image domains here
+  },
+}
 
-export default nextConfig;
+export default nextConfig

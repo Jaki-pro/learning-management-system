@@ -1,4 +1,4 @@
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "http://localhost:1337";
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_API_URL || "https://learning-management-system-production-2179.up.railway.app/";
 
 /**
  * A helper function to make fetch requests to Strapi API
