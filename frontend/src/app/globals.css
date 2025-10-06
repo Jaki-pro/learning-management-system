@@ -60,7 +60,11 @@ body {
   color: var(--card-foreground);
   border: 1px solid var(--border);
 }
-
+.input, .textarea {
+  background-color: var(--muted);
+  color: var(--foreground);
+  border: 1px solid var(--border);
+}
 .button {
   display: inline-flex;
   align-items: center;

@@ -1,6 +1,6 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { fetchApi } from '../../../../lib/api';
 import Card from '../../../../components/ui/Card';
@@ -21,13 +21,13 @@ export default function LoginPage() {
         method: 'POST',
         body: JSON.stringify({ identifier, password }),
       });
-      
+
       if (data.jwt) {
         localStorage.setItem('jwt', data.jwt);
         localStorage.setItem('user', JSON.stringify(data.user));
         router.push('/dashboard');
       }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (err: any) {
       setError(err.message || 'Failed to login. Please check your credentials.');
     }
@@ -41,23 +41,27 @@ export default function LoginPage() {
         </h1>
         <p className="text-muted-foreground">Sign in to access your dashboard.</p>
       </div>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <Input 
-          id="identifier" 
-          label="Email or Username" 
-          type="text" 
-          value={identifier} 
-          onChange={(e) => setIdentifier(e.target.value)} 
-          required 
-        />
-        <Input 
-          id="password" 
-          label="Password" 
-          type="password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          required 
-        />
+      <form onSubmit={handleSubmit} className="space-y-6 ">
+        <div className='flex jstify-center items-center flex-col gap-4'>
+          <Input
+            id="identifier"
+            label="Email or Username"
+            type="text"
+            className='input px-3 py-2 rounded-md w-full'
+            value={identifier}
+            onChange={(e) => setIdentifier(e.target.value)}
+            required
+          />
+          <Input
+            id="password"
+            label="Password"
+            type="password"
+            className='input px-3 py-2 rounded-md'
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
         <Button type="submit" className="w-full">
           Login

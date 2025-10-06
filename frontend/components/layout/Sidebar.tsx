@@ -15,7 +15,7 @@ import { useAuth } from '../../context/AuthContext';
 
  
 export default function Sidebar() {
-  const { user, logout } = useAuth(); 
+  const { user, logout, role } = useAuth(); 
   const pathname = usePathname();
  
   const navLinks = [
@@ -25,7 +25,7 @@ export default function Sidebar() {
     { name: 'Create Course', href: '/new-course', icon: Code, roles: ['developer', 'admin'] },
     { name: 'Create Post', href: '/new-post', icon: MessageSquare, roles: ['social-manager', 'admin'] },
   ];
-  console.log(user?.role?.name);
+  console.log(user);
   return (
     <aside className="
         md:flex flex-col w-64 h-screen 
