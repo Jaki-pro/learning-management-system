@@ -12,36 +12,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext'; 
  
-const Logo = () => {
-  const logoVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { staggerChildren: 0.1, delayChildren: 0.2 },
-    },
-  };
-  const letterVariants: Variants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0 },
-  };
 
-  return (
-    <motion.div
-      className="text-2xl font-bold h-16 flex items-center px-4"
-      variants={logoVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      <span className="bg-gradient-to-r from-blue-500 to-indigo-500 dark:from-sky-400 dark:to-cyan-400 bg-clip-text text-transparent">
-        {'Aura LMS'.split('').map((char, index) => (
-          <motion.span key={index} variants={letterVariants}>
-            {char}
-          </motion.span>
-        ))}
-      </span>
-    </motion.div>
-  );
-};
  
 export default function Sidebar() {
   const { user, logout } = useAuth(); 
@@ -49,8 +20,8 @@ export default function Sidebar() {
  
   const navLinks = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard, roles: ['student', 'developer', 'social-manager', 'admin'] },
-    { name: 'Courses', href: '/courses', icon: BookOpen, roles: ['student', 'developer', 'social-manager', 'admin'] },
-    { name: 'Social', href: '/social', icon: MessageSquare, roles: ['student', 'developer', 'social-manager', 'admin'] },
+    { name: 'Courses', href: '/courses', icon: BookOpen, roles: ['student', 'developer', 'social-manager', 'admin', 'public'] },
+    { name: 'Social', href: '/social', icon: MessageSquare, roles: ['student', 'developer', 'social-manager', 'admin', 'public'] },
     { name: 'Create Course', href: '/new-course', icon: Code, roles: ['developer', 'admin'] },
     { name: 'Create Post', href: '/new-post', icon: MessageSquare, roles: ['social-manager', 'admin'] },
   ];
@@ -60,13 +31,13 @@ export default function Sidebar() {
         md:flex flex-col w-64 h-screen 
         dark:bg-slate-900 
       border-r border-slate-200 dark:border-slate-800
-    ">
-      <Logo /> 
+    "> 
       <nav className="flex-grow px-4 py-4 space-y-2">
         {navLinks.map((link) => {
           // Role-based filtering
           if (!user?.role || !link.roles.includes(user.role.name)) {
-            return null;
+            if(!link.roles.includes('public'))
+              return null;
           }
 
           const isActive = pathname.startsWith(link.href);

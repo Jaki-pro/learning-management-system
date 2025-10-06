@@ -9,7 +9,7 @@ export default function DashboardLayout({
     <div className="flex  bg-background"> 
       <Sidebar />
       <div className="flex-1 flex flex-col overflow-hidden">
-       <Navbar title="sdfsadf"/>
+       
         <main className="flex-1   bg-muted/50 p-8">
           {children}
         </main>

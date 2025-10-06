@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google';
 import './globals.css';  
 import { ThemeProvider } from '../../context/ThemeContext'; 
 import { AuthProvider } from '../../context/AuthContext';
+import Navbar from '../../components/layout/Navbar';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -20,6 +21,9 @@ export default function RootLayout({
       <body className={inter.className}>
         <AuthProvider>
           <ThemeProvider> 
+           
+            <Navbar title="Learnora"/>
+           
           {children}
         </ThemeProvider>
         </AuthProvider>
