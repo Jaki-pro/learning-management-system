@@ -1,12 +1,12 @@
 'use client';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation'; 
+import { useRouter } from 'next/navigation';
 import { fetchApi } from '../../../../lib/api';
 import Card from '../../../../components/ui/Card';
 import Input from '../../../../components/ui/Input';
 import Button from '../../../../components/ui/Button';
 import Link from 'next/link';
- 
+
 
 export default function RegisterPage() {
   const [email, setEmail] = useState('');
@@ -23,7 +23,7 @@ export default function RegisterPage() {
         method: 'POST',
         body: JSON.stringify({ username, email, password }),
       });
-      
+
       if (data.jwt) {
         localStorage.setItem('jwt', data.jwt);
         localStorage.setItem('user', JSON.stringify(data.user));
@@ -43,30 +43,33 @@ export default function RegisterPage() {
         <p className="text-muted-foreground">Sign in to access your dashboard.</p>
       </div>
       <form onSubmit={handleSubmit} className="space-y-6">
-        <Input
-          id="email" 
-          label="Email" 
-          type="email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          required 
-        />
-        <Input
-          id="username" 
-          label="User Name" 
-          type="text" 
-          value={username} 
-          onChange={(e) => setUsername(e.target.value)} 
-          required 
-        />
-        <Input 
-          id="password" 
-          label="Password" 
-          type="password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          required 
-        />
+        <div className='flex jstify-center items-center flex-col gap-4'>
+          <Input
+            id="email"
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <Input
+            id="username"
+            label="User Name"
+            type="text"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+            required
+          />
+          <Input
+            id="password"
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
+        </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
         <Button type="submit" className="w-full">
           Sign Up

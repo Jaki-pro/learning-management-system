@@ -8,6 +8,7 @@ import { fetchApi } from '../lib/api';
 interface AuthContextType {
   user: User | null;
   loading: boolean;
+  role: string;
   logout: () => void;
 }
 
@@ -44,9 +45,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     checkUser();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname]); // Re-check on route change to be safe
-
+  const role = user?.role?.name || 'public';
   return (
-    <AuthContext.Provider value={{ user, loading, logout }}>
+    <AuthContext.Provider value={{ user, loading, logout, role }}>
       {children}
     </AuthContext.Provider>
   );

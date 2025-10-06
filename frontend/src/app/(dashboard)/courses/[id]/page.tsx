@@ -1,12 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { fetchApi } from '../../../../../lib/api';
 import Card from '../../../../../components/ui/Card';
 import PageWrapper from '../../../../../components/layout/PageWrapper';
 import Input from '../../../../../components/ui/Input';
 import Button from '../../../../../components/ui/Button';
 import { ChevronDown, ChevronUp, Pencil, Trash2 } from 'lucide-react';
+import { useAuth } from '../../../../../context/AuthContext';
 
 interface Lesson {
   documentId: string;
@@ -34,40 +35,40 @@ interface Course {
 }
 
 export default function CourseEditorPage() {
+  const { role } = useAuth();
+  const router = useRouter();
   const params = useParams();
-  const courseId = params.id as string; // now documentId, not numeric id
+  const courseId = params.id as string;
 
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState(true);
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>({});
   const [editingModuleId, setEditingModuleId] = useState<string | null>(null);
   const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
+  const [editingCourse, setEditingCourse] = useState(false);
 
   const [newModuleTitle, setNewModuleTitle] = useState('');
   const [newModuleDescription, setNewModuleDescription] = useState('');
-
   const [editModuleData, setEditModuleData] = useState({ title: '', description: '' });
   const [editLessonData, setEditLessonData] = useState({ title: '', videoUrl: '' });
+  const [editCourseData, setEditCourseData] = useState({ title: '', description: '' });
 
   const [newLessonData, setNewLessonData] = useState<Record<string, { title: string; videoUrl: string }>>({});
 
- 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  // Format fetched course
   const formatCourse = (raw: any): Course | null => {
     if (!raw) return null;
     const payload = raw.data ?? raw;
     const attrs = payload.attributes ?? payload;
-
     const modulesRaw = (attrs.modules?.data ?? attrs.modules) || [];
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+
     const modules: Module[] = modulesRaw.map((m: any) => {
       const mAttrs = m.attributes ?? m;
       const lessonsRaw = (mAttrs.lessons?.data ?? mAttrs.lessons) || [];
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const lessons: Lesson[] = lessonsRaw.map((l: any) => {
         const lAttrs = l.attributes ?? l;
         return {
-          documentId: l.documentId ?? l.id, // fallback for older data
+          documentId: l.documentId ?? l.id,
           title: lAttrs.title,
           content: lAttrs.content,
           videoUrl: lAttrs.videoUrl,
@@ -95,16 +96,15 @@ export default function CourseEditorPage() {
     };
   };
 
-  // --- Fetch course ---
+  // Fetch course
   const fetchCourse = async () => {
     if (!courseId) return;
     setLoading(true);
     try {
-      const response = await fetchApi(
-        `/api/courses/${courseId}?populate[modules][populate]=lessons`
-      );
+      const response = await fetchApi(`/api/courses/${courseId}?populate[modules][populate]=lessons`);
       const formatted = formatCourse(response);
       setCourse(formatted);
+      if (formatted) setEditCourseData({ title: formatted.title, description: formatted.description ?? '' });
     } catch (error) {
       console.error('Failed to fetch course', error);
       setCourse(null);
@@ -117,7 +117,33 @@ export default function CourseEditorPage() {
     fetchCourse();
   }, [courseId]);
 
-  // --- Add module ---
+  // Update/Delete Course
+  const handleUpdateCourse = async () => {
+    if (!course) return;
+    try {
+      await fetchApi(`/api/courses/${course.documentId}`, {
+        method: 'PUT',
+        body: JSON.stringify({ data: editCourseData }),
+      });
+      setEditingCourse(false);
+      await fetchCourse();
+    } catch (error) {
+      console.error('Failed to update course', error);
+    }
+  };
+
+  const handleDeleteCourse = async () => {
+    if (!confirm('Are you sure you want to delete this course and all its modules/lessons?')) return;
+    try {
+      await fetchApi(`/api/courses/${courseId}`, { method: 'DELETE' });
+      alert('Course deleted successfully.');
+      router.push('/courses');
+    } catch (error) {
+      console.error('Failed to delete course', error);
+    }
+  };
+
+  // Add/Update/Delete module
   const handleAddModule = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newModuleTitle) return;
@@ -125,11 +151,7 @@ export default function CourseEditorPage() {
       await fetchApi('/api/modules', {
         method: 'POST',
         body: JSON.stringify({
-          data: {
-            title: newModuleTitle,
-            description: newModuleDescription,
-            course: courseId, // documentId of course
-          },
+          data: { title: newModuleTitle, description: newModuleDescription, course: courseId },
         }),
       });
       setNewModuleTitle('');
@@ -140,30 +162,6 @@ export default function CourseEditorPage() {
     }
   };
 
-  // --- Add lesson ---
-  const handleAddLesson = async (e: React.FormEvent, moduleId: string) => {
-    e.preventDefault();
-    const payload = newLessonData[moduleId];
-    if (!payload || !payload.title) return;
-    try {
-      await fetchApi('/api/lessons', {
-        method: 'POST',
-        body: JSON.stringify({
-          data: {
-            title: payload.title,
-            videoUrl: payload.videoUrl,
-            module: moduleId, // documentId of module
-          },
-        }),
-      });
-      setNewLessonData(prev => ({ ...prev, [moduleId]: { title: '', videoUrl: '' } }));
-      await fetchCourse();
-    } catch (error) {
-      console.error('Failed to add lesson', error);
-    }
-  };
-
-  // --- Update/Delete Module ---
   const handleEditModule = (m: Module) => {
     setEditingModuleId(m.documentId);
     setEditModuleData({ title: m.title, description: m.description ?? '' });
@@ -192,7 +190,25 @@ export default function CourseEditorPage() {
     }
   };
 
-  // --- Update/Delete Lesson ---
+  // Add/Update/Delete lesson
+  const handleAddLesson = async (e: React.FormEvent, moduleId: string) => {
+    e.preventDefault();
+    const payload = newLessonData[moduleId];
+    if (!payload || !payload.title) return;
+    try {
+      await fetchApi('/api/lessons', {
+        method: 'POST',
+        body: JSON.stringify({
+          data: { title: payload.title, videoUrl: payload.videoUrl, module: moduleId },
+        }),
+      });
+      setNewLessonData(prev => ({ ...prev, [moduleId]: { title: '', videoUrl: '' } }));
+      await fetchCourse();
+    } catch (error) {
+      console.error('Failed to add lesson', error);
+    }
+  };
+
   const handleEditLesson = (lesson: Lesson) => {
     setEditingLessonId(lesson.documentId);
     setEditLessonData({ title: lesson.title, videoUrl: lesson.videoUrl ?? '' });
@@ -221,21 +237,53 @@ export default function CourseEditorPage() {
     }
   };
 
-  // --- UI toggle ---
   const toggleModule = (moduleId: string) => {
-    setExpandedModules(prev => ({
-      ...prev,
-      [moduleId]: !prev[moduleId],
-    }));
+    setExpandedModules(prev => ({ ...prev, [moduleId]: !prev[moduleId] }));
   };
 
-  if (loading) return <div>Loading course editor...</div>;
+  if (loading) return <div>Loading course...</div>;
   if (!course) return <div>Course not found.</div>;
 
   return (
     <PageWrapper>
-      <h1 className="text-3xl font-bold mb-2">Editing: {course.title}</h1>
-      <p className="text-muted-foreground mb-8">{course.description}</p>
+      <div className="flex items-start justify-between mb-12">
+        <div className="flex-1">
+          {editingCourse ? (
+            <div className="space-y-2">
+              <Input
+                value={editCourseData.title}
+                className='input px-3 py-2 rounded-md'
+                onChange={(e) => setEditCourseData({ ...editCourseData, title: e.target.value })}
+              />
+              <Input
+                value={editCourseData.description}
+                onChange={(e) => setEditCourseData({ ...editCourseData, description: e.target.value })}
+                className='input px-3 py-2 rounded-md'
+              />
+              <div className="flex gap-2">
+                <Button onClick={handleUpdateCourse}>Save</Button>
+                <Button variant="secondary" onClick={() => setEditingCourse(false)}>Cancel</Button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <h1 className="text-3xl font-bold mb-2">{course.title}</h1>
+              <p className="text-muted-foreground">{course.description}</p>
+            </>
+          )}
+        </div>
+
+        {(role === 'admin' || role === 'developer') && !editingCourse && (
+          <div className="flex gap-2">
+            <button onClick={() => setEditingCourse(true)} className="p-2 rounded-full hover:bg-muted">
+              <Pencil className="w-5 h-5 text-primary" />
+            </button>
+            <button onClick={handleDeleteCourse} className="p-2 rounded-full hover:bg-muted">
+              <Trash2 className="w-5 h-5 text-red-500" />
+            </button>
+          </div>
+        )}
+      </div>
 
       <div className="space-y-6">
         <h2 className="text-2xl font-semibold">Modules</h2>
@@ -251,10 +299,12 @@ export default function CourseEditorPage() {
                     <div className="flex flex-col gap-2">
                       <Input
                         value={editModuleData.title}
+                        className='input px-3 py-2 rounded-md'
                         onChange={(e) => setEditModuleData({ ...editModuleData, title: e.target.value })}
                       />
                       <Input
                         value={editModuleData.description}
+                        className='input px-3 py-2 rounded-md'
                         onChange={(e) => setEditModuleData({ ...editModuleData, description: e.target.value })}
                       />
                       <div className="flex gap-2">
@@ -271,19 +321,22 @@ export default function CourseEditorPage() {
                 </div>
 
                 <div className="flex items-center gap-2">
-                  <button onClick={() => handleEditModule(module)} className="p-2 rounded-full hover:bg-muted">
-                    <Pencil className="w-4 h-4 text-primary" />
-                  </button>
-                  <button onClick={() => handleDeleteModule(module.documentId)} className="p-2 rounded-full hover:bg-muted">
-                    <Trash2 className="w-4 h-4 text-red-500" />
-                  </button>
+                  {(role === 'admin' || role === 'developer') && (
+                    <>
+                      <button onClick={() => handleEditModule(module)} className="p-2 rounded-full hover:bg-muted">
+                        <Pencil className="w-4 h-4 text-primary" />
+                      </button>
+                      <button onClick={() => handleDeleteModule(module.documentId)} className="p-2 rounded-full hover:bg-muted">
+                        <Trash2 className="w-4 h-4 text-red-500" />
+                      </button>
+                    </>
+                  )}
                   <button onClick={() => toggleModule(module.documentId)} className="p-2 rounded-full hover:bg-muted">
                     {isExpanded ? <ChevronUp /> : <ChevronDown />}
                   </button>
-                </div> 
+                </div>
               </div>
 
-              {/* Lessons */}
               {isExpanded && (
                 <div className="mt-4 space-y-3">
                   <ul className="space-y-3">
@@ -301,15 +354,16 @@ export default function CourseEditorPage() {
                             <span className="flex items-center justify-center h-8 w-8 rounded-full bg-primary/10 text-primary font-semibold">
                               {`${ind + 1}`.padStart(2, '0')}
                             </span>
-
                             {isEditingLesson ? (
                               <div className="flex flex-col gap-2">
                                 <Input
                                   value={editLessonData.title}
+                                  className='input px-3 py-2 rounded-md'
                                   onChange={(e) => setEditLessonData({ ...editLessonData, title: e.target.value })}
                                 />
                                 <Input
                                   value={editLessonData.videoUrl}
+                                  className='input px-3 py-2 rounded-md'
                                   onChange={(e) => setEditLessonData({ ...editLessonData, videoUrl: e.target.value })}
                                 />
                                 <div className="flex gap-2">
@@ -334,7 +388,7 @@ export default function CourseEditorPage() {
                             )}
                           </div>
 
-                          {!isEditingLesson && (
+                          {!isEditingLesson && (role === 'admin' || role === 'developer') && (
                             <div className="flex items-center gap-2 mt-2 sm:mt-0">
                               <button onClick={() => handleEditLesson(lesson)} className="p-2 rounded-full hover:bg-muted">
                                 <Pencil className="w-4 h-4 text-primary" />
@@ -349,75 +403,77 @@ export default function CourseEditorPage() {
                     })}
                   </ul>
 
-                  {/* Add Lesson Form */}
-                  <form
-                    onSubmit={(e) => handleAddLesson(e, module.documentId)}
-                    className="mt-6 p-4 border-t border-border space-y-4"
-                  >
-                    <h4 className="font-semibold">Add New Lesson</h4>
-                    <div className="flex gap-4 items-start">
-                      <Input
-                        id={`lesson-title-${module.documentId}`}
-                        label="Lesson Title"
-                        type="text"
-                        value={newLessonData[module.documentId]?.title ?? ''}
-                        onChange={(e) =>
-                          setNewLessonData(prev => ({
-                            ...prev,
-                            [module.documentId]: {
-                              title: e.target.value,
-                              videoUrl: prev[module.documentId]?.videoUrl ?? '',
-                            },
-                          }))
-                        }
-                      />
-                      <Input
-                        id={`lesson-url-${module.documentId}`}
-                        label="Video URL"
-                        type="text"
-                        value={newLessonData[module.documentId]?.videoUrl ?? ''}
-                        onChange={(e) =>
-                          setNewLessonData(prev => ({
-                            ...prev,
-                            [module.documentId]: {
-                              title: prev[module.documentId]?.title ?? '',
-                              videoUrl: e.target.value,
-                            },
-                          }))
-                        }
-                      />
-                      <Button type="submit" variant="secondary" className="self-end">
-                        Add Lesson
-                      </Button>
-                    </div>
-                  </form>
+                  {(role === 'admin' || role === 'developer') && (
+                    <form
+                      onSubmit={(e) => handleAddLesson(e, module.documentId)}
+                      className="mt-6 p-4 border-t border-border space-y-4"
+                    >
+                      <h4 className="font-semibold">Add New Lesson</h4>
+                      <div className="flex gap-4 items-start">
+                        <Input
+                          label="Lesson Title"
+                          type="text"
+                          className='input px-3 py-2 rounded-md'
+                          value={newLessonData[module.documentId]?.title ?? ''}
+                          onChange={(e) =>
+                            setNewLessonData(prev => ({
+                              ...prev,
+                              [module.documentId]: {
+                                title: e.target.value,
+                                videoUrl: prev[module.documentId]?.videoUrl ?? '',
+                              },
+                            }))
+                          }
+                        />
+                        <Input
+                          label="Video URL"
+                          type="text"
+                          className='input px-3 py-2 rounded-md'
+                          value={newLessonData[module.documentId]?.videoUrl ?? ''}
+                          onChange={(e) =>
+                            setNewLessonData(prev => ({
+                              ...prev,
+                              [module.documentId]: {
+                                title: prev[module.documentId]?.title ?? '',
+                                videoUrl: e.target.value,
+                              },
+                            }))
+                          }
+                        />
+                        <Button type="submit" variant="secondary" className="self-end">
+                          Add Lesson
+                        </Button>
+                      </div>
+                    </form>
+                  )}
                 </div>
               )}
             </Card>
           );
         })}
 
-        {/* Add new module */}
-        <Card className="p-6 bg-muted/50 border-dashed">
-          <h3 className="text-xl font-bold mb-4">Add a New Module</h3>
-          <form onSubmit={handleAddModule} className="space-y-4">
-            <Input
-              id="new-module-title"
-              label="Module Title"
-              type="text"
-              value={newModuleTitle}
-              onChange={(e) => setNewModuleTitle(e.target.value)}
-            />
-            <Input
-              id="new-module-desc"
-              label="Module Description"
-              type="text"
-              value={newModuleDescription}
-              onChange={(e) => setNewModuleDescription(e.target.value)}
-            />
-            <Button type="submit">Add Module</Button>
-          </form>
-        </Card>
+        {(role === 'admin' || role === 'developer') && (
+          <Card className="p-6 bg-muted/50 border-dashed">
+            <h3 className="text-xl font-bold mb-4">Add a New Module</h3>
+            <form onSubmit={handleAddModule} className="space-y-4">
+              <Input
+                label="Module Title"
+                type="text"
+                value={newModuleTitle}
+                onChange={(e) => setNewModuleTitle(e.target.value)}
+                className='input px-3 py-2 rounded-md'
+              />
+              <Input
+                label="Module Description"
+                type="text"
+                value={newModuleDescription}
+                onChange={(e) => setNewModuleDescription(e.target.value)}
+                className='input px-3 py-2 rounded-md'
+              />
+              <Button type="submit">Add Module</Button>
+            </form>
+          </Card>
+        )}
       </div>
     </PageWrapper>
   );

@@ -1,7 +1,11 @@
 'use client';
+import { useAuth } from '../../context/AuthContext';
 import ThemeToggle from '../ui/ThemeToggle';
 import { motion, Variants } from 'framer-motion';
-const Logo = ({title}) => {
+type LogoProps = {
+  title: string; 
+};
+const Logo = ({title}:LogoProps) => { 
   const logoVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -20,6 +24,7 @@ const Logo = ({title}) => {
       variants={logoVariants}
       initial="hidden"
       animate="visible"
+      onClick={() => (window.location.href = '/')}
     >
       <span className="bg-gradient-to-r from-blue-500 to-indigo-500 dark:from-sky-400 dark:to-cyan-400 bg-clip-text text-transparent">
         {title?.split('').map((char, index) => (
@@ -31,13 +36,17 @@ const Logo = ({title}) => {
     </motion.div>
   );
 };
-export default function Navbar({ title }: { title: string }) {
+export default function Navbar({ title }: { title: string}) {
+  const {role, logout} = useAuth();
   return (
     <header className="flex items-center justify-between p-6 bg-card border-b border-border">
       <Logo title={title}/>
       <div className="flex items-center space-x-4">
         {/* I will add search here for extra featuer*/}
         <ThemeToggle />
+        {/* {
+          role? <button onClick={logout}>logout</button>: <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition" onClick={()=>window.location.href='/login'}>Login</button>
+        } */}
       </div>
     </header>
   );

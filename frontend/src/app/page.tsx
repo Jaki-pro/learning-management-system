@@ -7,9 +7,11 @@ import Button from "../../components/ui/Button";
 import Image from "next/image";
 import ReviewSection from "../../components/Reviews";
 import { useRouter } from "next/navigation";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Page() {
   const [mounted, setMounted] = useState(false);
+  const {role} = useAuth();
   const router = useRouter();
   useEffect(() => setMounted(true), []);
   if (!mounted) return null;
@@ -31,9 +33,9 @@ export default function Page() {
         </p>
         <div className="mt-8 flex gap-4">
           <Button onClick={()=>router.push('/courses')} className="px-6 py-3 text-lg">Explore Courses</Button>
-          <Button  onClick={()=>router.push('/login')} className="px-3 py-1 text-lg button">
+          {!role&&<Button  onClick={()=>router.push('/login')} className="px-3 py-1 text-lg button">
             Join Now
-          </Button>
+          </Button>}
         </div>
       </section>
 

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';  
 import { ThemeProvider } from '../../context/ThemeContext'; 
-import { AuthProvider } from '../../context/AuthContext';
+import { AuthProvider, useAuth } from '../../context/AuthContext';
 import Navbar from '../../components/layout/Navbar';
 
 const inter = Inter({ subsets: ['latin'] });
@@ -15,13 +15,12 @@ export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
-}) {
+}) { 
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <AuthProvider>
-          <ThemeProvider> 
-           
+          <ThemeProvider>  
             <Navbar title="Learnora"/>
            
           {children}
