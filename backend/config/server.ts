@@ -1,7 +1,11 @@
+// path: ./config/server.js
+
 module.exports = ({ env }) => ({
-  host: '0.0.0.0',
+  host: env('HOST', '0.0.0.0'),
   port: env.int('PORT', 1337),
-  url: env('PUBLIC_URL', 'https://learning-management-system-production-2179.up.railway.app'),
-  proxy: true, // 👈 important: trust Railway proxy
-  app: { keys: env.array('APP_KEYS') },
+  url: env('URL'), // Make sure this is set
+  proxy: true,     // <-- ADD THIS LINE
+  app: {
+    keys: env.array('APP_KEYS'),
+  },
 });
