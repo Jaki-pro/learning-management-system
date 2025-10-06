@@ -1,12 +1,31 @@
 module.exports = [
-  'global::force-https', // 👈 your custom middleware (make sure it's first!)
   'strapi::errors',
-  'strapi::security',
+  {
+    name: 'strapi::security',
+    config: {
+      contentSecurityPolicy: {
+        useDefaults: true,
+        directives: {
+          'connect-src': ["'self'", 'https:'],
+          'img-src': ["'self'", 'data:', 'blob:', 'https:'],
+          'media-src': ["'self'", 'data:', 'blob:', 'https:'],
+          upgradeInsecureRequests: null,
+        },
+      },
+    },
+  },
   'strapi::cors',
   'strapi::poweredBy',
   'strapi::logger',
   'strapi::query',
-  'strapi::session',
+  {
+    name: 'strapi::session',
+    config: {
+      // 👇 critical part
+      secure: false, // allow non-secure cookie in proxyed HTTPS envs
+      sameSite: 'none',
+    },
+  },
   'strapi::body',
   'strapi::favicon',
   'strapi::public',

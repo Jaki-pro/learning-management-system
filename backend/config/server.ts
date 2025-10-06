@@ -5,7 +5,9 @@ module.exports = ({ env }) => ({
 
   url: env('URL', 'https://learning-management-system-production-2179.up.railway.app'),
 
-  proxy: true, // <— Force trust proxy for HTTPS headers
+  proxy: {
+    koa: process.env.NODE_ENV === 'production'
+  },
 
   app: {
     keys: env.array('APP_KEYS'),
