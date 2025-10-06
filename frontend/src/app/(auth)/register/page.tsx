@@ -50,15 +50,15 @@ export default function RegisterPage() {
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            className="input  w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
           />
           <Input
             id="username"
-            label="User Name"
+            label="Username"
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            required
+            className="input w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
           />
           <Input
             id="password"
@@ -67,6 +67,7 @@ export default function RegisterPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="input w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
           />
 
         </div>

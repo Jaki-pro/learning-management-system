@@ -5,6 +5,7 @@ import { motion, Variants } from 'framer-motion';
 type LogoProps = {
   title: string; 
 };
+
 const Logo = ({title}:LogoProps) => { 
   const logoVariants: Variants = {
     hidden: { opacity: 0 },
@@ -41,12 +42,11 @@ export default function Navbar({ title }: { title: string}) {
   return (
     <header className="flex items-center justify-between p-6 bg-card border-b border-border">
       <Logo title={title}/>
-      <div className="flex items-center space-x-4">
-        {/* I will add search here for extra featuer*/}
+      <div className="flex items-center space-x-4"> 
         <ThemeToggle />
-        {/* {
-          role? <button onClick={logout}>logout</button>: <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition" onClick={()=>window.location.href='/login'}>Login</button>
-        } */}
+        {
+          !(role==='public')? <button onClick={logout}>logout</button>: <button className="px-4 py-2 bg-primary  rounded-lg hover:bg-primary/90 transition" onClick={()=>window.location.href='/login'}>Login</button>
+        }
       </div>
     </header>
   );

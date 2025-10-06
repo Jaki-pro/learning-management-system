@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react'; 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'; 
-import { Enrollment, User } from '../../../../lib/types';
+import { Enrollment } from '../../../../lib/types';
 import { fetchApi } from '../../../../lib/api';
 import PageWrapper from '../../../../components/layout/PageWrapper';
 import Card from '../../../../components/ui/Card';

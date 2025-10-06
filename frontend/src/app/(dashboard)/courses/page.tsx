@@ -51,7 +51,7 @@ export default function CoursesPage() {
             {courses.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {courses.map((course) => (
-                        <Card key={course?.id} className="flex flex-col overflow-hidden">
+                        <Card key={course?.documentId} className="flex flex-col overflow-hidden">
                             <div className="h-40 bg-gradient-to-r from-gray-200 to-gray-300 dark:from-slate-700 dark:to-slate-800" />
                             <div className="p-6 flex flex-col flex-grow">
                                 <h3 className="text-xl font-semibold">{course?.title}</h3>

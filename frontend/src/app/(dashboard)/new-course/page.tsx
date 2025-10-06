@@ -10,8 +10,7 @@ import Swal from 'sweetalert2';
 export default function NewCoursePage() {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
-    const [error, setError] = useState('');
-    const [message, setMessage] = useState('');
+    const [error, setError] = useState(''); 
     const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -19,12 +18,13 @@ export default function NewCoursePage() {
         setError('');
         console.log(title, description);
         try {
-            const res = await fetchApi('/api/courses', {
+            await fetchApi('/api/courses', {
                 method: 'POST',
                 body: JSON.stringify({ data: { title, description } }),
             });
             
             // router.push(`/courses/${res.data.id}/edit`);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err: any) {
             setError(err.message || 'Failed to create course.');
         } finally{

@@ -43,24 +43,24 @@ export default function LoginPage() {
       </div>
       <form onSubmit={handleSubmit} className="space-y-6 ">
         <div className='flex jstify-center items-center flex-col gap-4'>
-          <Input
-            id="identifier"
+          <Input 
+            id="Identifier"
             label="Email or Username"
             type="text"
-            className='input px-3 py-2 rounded-md w-full'
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            required
+            className="input w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
           />
           <Input
             id="password"
             label="Password"
-            type="password"
-            className='input px-3 py-2 rounded-md'
+            type="password" 
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            className="input w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 transition-all"
           />
+           
         </div>
         {error && <p className="text-sm text-red-500">{error}</p>}
         <Button type="submit" className="w-full">

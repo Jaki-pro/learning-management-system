@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { motion, Variants } from 'framer-motion';
+import { motion} from 'framer-motion';
 import { 
   LayoutDashboard, 
   BookOpen, 
@@ -15,7 +15,7 @@ import { useAuth } from '../../context/AuthContext';
 
  
 export default function Sidebar() {
-  const { user, logout, role } = useAuth(); 
+  const { user, logout } = useAuth(); 
   const pathname = usePathname();
  
   const navLinks = [
@@ -68,8 +68,7 @@ export default function Sidebar() {
             </Link>
           );
         })}
-      </nav> 
-      {/* User Account Section */}
+      </nav>  
       <div className="p-4 border-t border-slate-200 dark:border-slate-800">
         {user ? (
           <div className="flex items-center justify-between">

@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
-// Mock data for the reviews
+ 
 const initialReviews = [
   { name: "Sarah J.", job: "Marketing Lead", photo: "https://placehold.co/56x56/4c6ef5/ffffff?text=SJ", desc: "The responsiveness and attention to detail surpassed all expectations. Highly recommended!" },
   { name: "John P.", job: "Software Engineer", photo: "https://placehold.co/56x56/20c997/ffffff?text=JP", desc: "A game-changer for our workflow. Setup was easy, and the results were immediate." },
   { name: "Emily K.", job: "Product Designer", photo: "https://placehold.co/56x56/fa5252/ffffff?text=EK", desc: "Fantastic UI/UX design. Clean, intuitive, and a pleasure to use every day." },
   { name: "David L.", job: "CEO, Innovate", photo: "https://placehold.co/56x56/fcc419/ffffff?text=DL", desc: "Incredible value for the price. Our team productivity has seen a massive boost." },
 ];
-
-// Duplicate the array to create the seamless loop effect
+ 
 const reviews = [...initialReviews, ...initialReviews];
  
 const ReviewSection = () => { 
@@ -54,7 +54,7 @@ const ReviewSection = () => {
                 className={`min-w-[300px] max-w-sm ${cardClasses} border ${borderClasses} rounded-2xl p-6 shadow-xl flex-shrink-0`}
               >
                 <div className="flex items-center gap-4 mb-4"> 
-                  <img
+                  <Image
                     src={r.photo}
                     alt={r.name}
                     className={`w-14 h-14 rounded-full object-cover border ${borderClasses}`}

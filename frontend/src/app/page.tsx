@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Sparkles, Rocket, Star } from "lucide-react";
-import Button from "../../components/ui/Button";
-import Image from "next/image";
+import Button from "../../components/ui/Button"; 
 import ReviewSection from "../../components/Reviews";
 import { useRouter } from "next/navigation";
 import { useAuth } from "../../context/AuthContext";
