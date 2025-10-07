@@ -68,7 +68,7 @@ export default function DashboardPage() {
         </div>
       ) : (
         <Card className="text-center p-10">
-            <h2 className="text-xl font-semibold">No Courses Yet!</h2>
+            <h2 className="text-xl font-semibold">No Enrollments Yet!</h2>
             <p className="text-muted-foreground mt-2">You are not enrolled in any courses. Explore our catalog to get started.</p>
         </Card>
       )}

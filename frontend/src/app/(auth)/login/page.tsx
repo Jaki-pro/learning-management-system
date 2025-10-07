@@ -10,8 +10,8 @@ import Input from '../../../../components/ui/Input';
 import Button from '../../../../components/ui/Button';
 
 export default function LoginPage() {
-  const [identifier, setIdentifier] = useState('');
-  const [password, setPassword] = useState('');
+  const [identifier, setIdentifier] = useState('jakariacoc8980@gmail.com');
+  const [password, setPassword] = useState('J@kariyaalimss23cse');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
