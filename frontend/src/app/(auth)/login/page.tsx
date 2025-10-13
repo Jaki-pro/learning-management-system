@@ -29,10 +29,10 @@ export default function LoginPage() {
 
       if (data.jwt) {
         // Force React to sync state updates BEFORE navigation
-        flushSync(() => {
+         
           localStorage.setItem('jwt', data.jwt);
           localStorage.setItem('user', JSON.stringify(data.user));
-        });
+        
 
         // Navigate immediately
         router.replace('/dashboard');
