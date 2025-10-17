@@ -3,10 +3,10 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Sparkles, Rocket, Star } from "lucide-react";
-import Button from "../../components/ui/Button"; 
-import ReviewSection from "../../components/Reviews";
+import Button from "../components/ui/Button"; 
+import ReviewSection from "../components/Reviews";
 import { useRouter } from "next/navigation";
-import { useAuth } from "../../context/AuthContext";
+import { useAuth } from "../context/AuthContext";
 
 export default function Page() {
   const [mounted, setMounted] = useState(false);

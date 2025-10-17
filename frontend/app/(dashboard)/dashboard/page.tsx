@@ -2,11 +2,11 @@
 import { useEffect, useState } from 'react'; 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link'; 
-import { Enrollment } from '../../../../lib/types';
-import { fetchApi } from '../../../../lib/api';
-import PageWrapper from '../../../../components/layout/PageWrapper';
-import Card from '../../../../components/ui/Card';
-import { useAuth } from '../../../../context/AuthContext';
+import { Enrollment } from '../../../lib/types';
+import { fetchApi } from '../../../lib/api';
+import PageWrapper from '../../../components/layout/PageWrapper';
+import Card from '../../../components/ui/Card';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function DashboardPage() {
   const { user, loading: authLoading, logout } = useAuth();

@@ -2,14 +2,14 @@
 'use client';
 import { useEffect, useState, useMemo } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { fetchApi } from '../../../../../lib/api';
-import Card from '../../../../../components/ui/Card';
-import PageWrapper from '../../../../../components/layout/PageWrapper';
-import Input from '../../../../../components/ui/Input';
-import TextAreaInput from '../../../../../components/ui/TextAreaInput';
-import Button from '../../../../../components/ui/Button';
+import { fetchApi } from '../../../../lib/api';
+import Card from '../../../../components/ui/Card';
+import PageWrapper from '../../../../components/layout/PageWrapper';
+import Input from '../../../../components/ui/Input';
+import TextAreaInput from '../../../../components/ui/TextAreaInput';
+import Button from '../../../../components/ui/Button';
 import { ChevronDown, ChevronUp, Pencil, Trash2, Search } from 'lucide-react';
-import { useAuth } from '../../../../../context/AuthContext';
+import { useAuth } from '../../../../context/AuthContext';
 import Fuse from 'fuse.js';
 
 interface Lesson {

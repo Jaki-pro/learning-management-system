@@ -1,10 +1,10 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { fetchApi } from '../../../../lib/api';
-import Card from '../../../../components/ui/Card';
-import Input from '../../../../components/ui/Input';
-import Button from '../../../../components/ui/Button';
+import { fetchApi } from '../../../lib/api';
+import Card from '../../../components/ui/Card';
+import Input from '../../../components/ui/Input';
+import Button from '../../../components/ui/Button';
 import Link from 'next/link';
 
 

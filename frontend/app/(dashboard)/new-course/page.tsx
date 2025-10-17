@@ -1,10 +1,10 @@
 'use client';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { fetchApi } from '../../../../lib/api';
-import PageWrapper from '../../../../components/layout/PageWrapper';
-import Input from '../../../../components/ui/Input';
-import Button from '../../../../components/ui/Button';
+import { fetchApi } from '../../../lib/api';
+import PageWrapper from '../../../components/layout/PageWrapper';
+import Input from '../../../components/ui/Input';
+import Button from '../../../components/ui/Button';
 import Swal from 'sweetalert2';
 
 export default function NewCoursePage() {

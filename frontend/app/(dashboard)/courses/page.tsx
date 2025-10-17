@@ -1,10 +1,10 @@
 'use client';
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { fetchApi } from '../../../../lib/api';
-import PageWrapper from '../../../../components/layout/PageWrapper';
-import Card from '../../../../components/ui/Card';
-import Button from '../../../../components/ui/Button';
+import { fetchApi } from '../../../lib/api';
+import PageWrapper from '../../../components/layout/PageWrapper';
+import Card from '../../../components/ui/Card';
+import Button from '../../../components/ui/Button';
 
 type Course = {
     id: number;

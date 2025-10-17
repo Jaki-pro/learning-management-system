@@ -4,10 +4,10 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { flushSync } from 'react-dom';
-import { fetchApi } from '../../../../lib/api';
-import Card from '../../../../components/ui/Card';
-import Input from '../../../../components/ui/Input';
-import Button from '../../../../components/ui/Button';
+import { fetchApi } from '../../../lib/api';
+import Card from '../../../components/ui/Card';
+import Input from '../../../components/ui/Input';
+import Button from '../../../components/ui/Button';
 
 export default function LoginPage() {
   const [identifier, setIdentifier] = useState('jakariacoc8980@gmail.com');
